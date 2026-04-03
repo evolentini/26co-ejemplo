@@ -11,7 +11,7 @@
 /* === Private data type declarations ========================================================== */
 
 struct gpio_s {
-    uint8_t port; 
+    uint8_t port;
     uint8_t pin;
     bool output;
     bool state;
@@ -33,7 +33,7 @@ gpio_t GpioAllocate(void) {
     static struct gpio_s instances[MAX_INSTANCES] = {0};
     gpio_t self = NULL;
 
-    for(int indice=0; indice < MAX_INSTANCES; indice++) {
+    for (int indice = 0; indice < MAX_INSTANCES; indice++) {
         if (!instances[indice].allocated) {
             self = &instances[indice];
             self->allocated = true;
@@ -74,7 +74,7 @@ bool GpioGetState(gpio_t self) {
     }
 }
 
-void GpioSetState(gpio_t self, bool active){
+void GpioSetState(gpio_t self, bool active) {
     if (self->output) {
         HalGpioSetState(self->port, self->pin, active);
         self->state = active;
