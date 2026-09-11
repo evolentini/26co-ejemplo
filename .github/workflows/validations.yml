@@ -14,9 +14,40 @@ jobs:
   verifications:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          python-version: "3.13"
-      - name: Run Format Validations
-        uses: pre-commit/action@v3.0.0
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      # ---- Pre-commit (formato) ----
+      - name: Install pre-commit
+        run: python -m pip install pre-commit
+      - name: Run pre-commit
+        run: pre-commit run --show-diff-on-failure --color=always --all-files
+
+      # ---- Tests con Ceedling (SIN gcov) ----
+      - name: Install Ceedling
+        run: gem install ceedling
+      - name: Run Unit Tests
+        run: ceedling clobber test:all
+
+      # ---- Artefactos útiles para depurar ----
+      - name: Upload Ceedling artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ceedling-artifacts
+          path: |
+            build/artifacts/**/*
+          if-no-files-found: warn
