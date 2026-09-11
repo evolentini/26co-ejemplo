@@ -59,4 +59,4 @@ jobs:
         with:
           name: Ceedling Unit Tests
           path: build/artifacts/test/*.xml
-          reporter: junit
+          reporter: jest-junit
