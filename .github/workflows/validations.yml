@@ -51,12 +51,3 @@ jobs:
           path: |
             build/artifacts/**/*
           if-no-files-found: warn
-
-      # ---- Reporte de resultados JUnit ----
-      - name: Test Results Report
-        if: always()
-        uses: dorny/test-reporter@v1
-        with:
-          name: Ceedling Unit Tests
-          path: build/artifacts/test/*.xml
-          reporter: jest-junit
